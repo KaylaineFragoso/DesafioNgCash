@@ -1,17 +1,29 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { LayoutComponents } from "../../components/LayoutComponents"
+import { LayoutComponents } from "../../components/LayoutComponents";
 
-import jpIMG from '../../assets/logo.ngcash.svg'
-
+import jpIMG from "../../assets/logo.ngcash.svg";
+import { api } from "../../services/api";
 
 export const Register = () => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("")
+  const [name, setName] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = {
+      name,
+      email,
+      password,
+    };
+    await api.post("/create", data);
+    alert("Usuário criado com sucesso!");
+  };
 
   return (
-    <LayoutComponents >
-      <form className="login-form">
+    <LayoutComponents>
+      <form onSubmit={handleSubmit} className="login-form">
         <span className="login-form-title"> Criar Conta </span>
 
         <span className="login-form-title">
@@ -21,11 +33,21 @@ export const Register = () => {
         <div className="wrap-input">
           <input
             className={name !== "" ? "has-val input" : "input"}
-            type="name"
+            type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
           <span className="focus-input" data-placeholder="Nome"></span>
+        </div>
+
+        <div className="wrap-input">
+          <input
+            className={email !== "" ? "has-val input" : "input"}
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <span className="focus-input" data-placeholder="Email"></span>
         </div>
 
         <div className="wrap-input">
@@ -35,20 +57,22 @@ export const Register = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <span className="focus-input" data-placeholder="Senha"></span>
+          <span className="focus-input" data-placeholder="Password"></span>
         </div>
 
         <div className="container-login-form-btn">
-          <button className="login-form-btn">Login</button>
+          <button type="submit" className="login-form-btn">
+            Criar Conta
+          </button>
         </div>
 
         <div className="text-center">
           <span className="txt1">Já possui conta? </span>
           <Link className="txt2" to="/login">
-            Acessar.
+            Acessar com Email e Senha.
           </Link>
         </div>
       </form>
     </LayoutComponents>
-  )
-}
+  );
+};
